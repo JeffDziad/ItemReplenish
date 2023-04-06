@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -18,7 +19,8 @@ public class EventListener implements Listener {
         PlayerInventory inventory = player.getInventory();
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);
-            if (item != null && item.getType().equals(event.getBrokenItem().getType()) && i != inventory.getHeldItemSlot()) {
+            if (item != null && item.getType().equals(event.getBrokenItem().getType()) &&
+                    i != inventory.getHeldItemSlot()) {
                 inventory.setItem(inventory.getHeldItemSlot(), item);
                 inventory.setItem(i, new ItemStack(Material.AIR));
                 break;
@@ -35,7 +37,8 @@ public class EventListener implements Listener {
         if(!handItem.getType().equals(Material.AIR) && handItem.getAmount() == 1) {
             for (int i = 0; i < inventory.getSize(); i++) {
                 ItemStack item = inventory.getItem(i);
-                if(item != null && item.getType().equals(block.getType()) && i != inventory.getHeldItemSlot()) {
+                if(item != null && item.getType().equals(block.getType()) &&
+                        i != inventory.getHeldItemSlot()) {
                     inventory.setItem(inventory.getHeldItemSlot(), item);
                     inventory.setItem(i, new ItemStack(Material.AIR));
                     break;
@@ -45,6 +48,23 @@ public class EventListener implements Listener {
         }
     }
 
-//  Add food replenish capabilities.
+    @EventHandler
+    public void onPlayerEat(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        ItemStack food = event.getItem();
+        PlayerInventory inventory = player.getInventory();
+        ItemStack handItem = inventory.getItemInMainHand();
+        if(!handItem.getType().equals(Material.AIR) && handItem.getAmount() == 1) {
+            for (int i = 0; i < inventory.getSize(); i++) {
+                ItemStack item = inventory.getItem(i);
+                if (item != null && item.getType().equals(food.getType()) &&
+                        i != inventory.getHeldItemSlot()) {
+                    inventory.setItem(inventory.getHeldItemSlot(), item);
+                    inventory.setItem(i, new ItemStack((Material.AIR)));
+                    break;
+                }
+            }
+        }
+    }
 
 }

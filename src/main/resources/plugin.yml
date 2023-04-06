@@ -1,6 +1,6 @@
 name: ItemReplenish
-description: Tools that break and block stacks that are finished are replaced with new stacks or tools from your inventory.
+description: Replenishes broken tools and empty stacks with the items from your inventory.
 author: JeffDziad
 api-version: 1.19
-version: 0.1.0
+version: 1.2
 main: com.JeffDziad.ItemReplenish.ItemReplenish
