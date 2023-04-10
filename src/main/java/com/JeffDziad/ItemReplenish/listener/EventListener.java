@@ -28,13 +28,17 @@ public class EventListener implements Listener {
         }
     }
 
+    //! Might be incorrectly triggered.
+    //! With a tool in the main hand and a consumable/placeable in the offhand, tools can be overwritten because:
+    //! - They are always in stacks of 1, thus onBlockPlace thinks its the end of a stack.
+    //? What does onBlock replace the tool with? (Offhand item or other?)
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack handItem = player.getInventory().getItemInMainHand();
         PlayerInventory inventory = player.getInventory();
-        if(!handItem.getType().equals(Material.AIR) && handItem.getAmount() == 1) {
+        if(handItem.getType().isBlock() && handItem.getAmount() == 1) {
             for (int i = 0; i < inventory.getSize(); i++) {
                 ItemStack item = inventory.getItem(i);
                 if(item != null && item.getType().equals(block.getType()) &&
